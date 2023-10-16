@@ -21,6 +21,8 @@ int main() {
     double y = a*x + b; //y=mx+q
 
     cout<<"Il valore dell'ordinata y e': " << y;
+	
+	//ciao alessio
 
     return 0;
 }
