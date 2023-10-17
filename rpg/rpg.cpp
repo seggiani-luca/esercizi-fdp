@@ -15,7 +15,7 @@ vettore2d boundLivelloMassimi = {55, 15};
 
 //elementi menu
 struct elementoMenu { char ident; char* tag; void *funzione(void); };
-const int elementiMenuMappa = 4; //fornisco una lunghezza fissa per il compilatore
+const int elementiMenuMappa = 1; //fornisco una lunghezza fissa per il compilatore
 
 //utility livello
 int vettore2d_indice(vettore2d& vettore, int& dimX) { //converte un vettore bidimensionale in un indice array
@@ -71,6 +71,11 @@ void inizializza_giocatore(Casella stanza[], int dimX, int dimY) {
 	casellaGiocatore -> entita = giocatore;
 }
 
+//generazione menu
+void inizializza_menuMappa(elementoMenu menuMappa[elementiMenuMappa]) {
+	
+}
+
 //disegno
 void disegna_entita(Entita& entita) {
 	switch(entita) {
@@ -94,7 +99,7 @@ void disegna_casella(Casella& casella) {
 }
 
 int disegna_menu(elementoMenu menu[]) {
-	
+	return 0;
 }
 
 //logica di gioco
@@ -124,13 +129,8 @@ int main() {
 	inizializza_giocatore(stanza, dimX, dimY);
 	
 	//inizializzazione menu
-	elementoMenu menuMappa[elementiMenuMappa] = //ridefinisci singolarmente o comunque sistema
-	{
-		'w', "Vai su", spostaGiocatore,
-		'a', "Vai a sinistra", spostaGiocatore,
-		's', "Vai giu", spostaGiocatore,
-		'd', "Vai a destra", spostaGiocatore	
-	};
+	elementoMenu menuMappa[elementiMenuMappa];
+	inizializza_menuMappa(menuMappa);
 	
 	//game loop
 	disegna_stanza(stanza, dimX, dimY);

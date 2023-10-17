@@ -1,3 +1,4 @@
 #gitignore generato da me (si spera che funzioni!)
 #ignora oggetti eseguibili
 *.exe
+*.out
