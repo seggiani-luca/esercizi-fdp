@@ -7,18 +7,25 @@ using namespace std;
 struct vettore2d { int x; int y; };
 
 //elementi livello
-enum TipoCasella { muro, casellaVuota };
+enum TipoCasella { muro, porta, casellaVuota };
 enum Entita { giocatore, entitaVuota };
 struct Casella { TipoCasella tipoCasella; Entita entita; };
-vettore2d posizioneGiocatore; //la posizione del giocatore e' definita sia come entita che come coordinate... forse va cambiato
+vettore2d posizioneGiocatore; //la posizione del giocatore e' definita sia come entita che come coordinate per accesso rapido
 vettore2d boundLivelloMinimi = {5,5};
 vettore2d boundLivelloMassimi = {55, 15};
 
+vettore2d posizioneGlobale; //rappresenta la base da cui viene calcolato il seed casuale
+vettore2d dim; //dimensioni livello
+
+int cantor(int a, int b) { //implementazione della funzione coppia di cantor
+	return (0.5*(a+b)*(a+b+1)+b);
+}
+
 //elementi menu
 int contatoreStringhe;
-struct elementoMenu { char ident; string tag; void (*funzione)(int, Casella*, int&); }; 	//le funzioni accettano un indice i equivalente alla chiamata effettuata dal giocatore, questo
+struct elementoMenu { char ident; string tag; int (*funzione)(int, Casella*); }; 	    //le funzioni accettano un indice i equivalente alla chiamata effettuata dal giocatore, questo
 																						//è fatto per poter permettere comportamenti diversi alla solita funzione (e.g. spostaGiocatore)
-																						//inoltre accettano un riferimento alla stanza attuale e la dimensione orizzontale della suddetta
+																						//inoltre accettano un riferimento alla stanza attuale (per poterci lavorare)
 const int elementiMenuMappa = 4; //fornisco una lunghezza fissa per il compilatore
 const int scrollbackConsole = 16; //imposta uno scrollback di 16
 string lineeConsole[scrollbackConsole];
@@ -32,22 +39,22 @@ void clear() {	//svuota lo schermo, multipiattaforma
 	#endif
 }
 void separator(int dim) {
-	for(int i = 0; i < dim * 2 + 32; i++) {
+	for(int i = 0; i < dim * 2 + 48; i++) {
 		cout << "-";
 	}
 	cout << endl;
 }
 
 //utility livello
-int vettore2d_indice(vettore2d& vettore, int& dimX) { //converte un vettore bidimensionale in un indice array
-	return vettore.x + vettore.y * dimX;
+int vettore2d_indice(vettore2d& vettore) { //converte un vettore bidimensionale in un indice array
+	return vettore.x + vettore.y * dim.x;
 }
-int vettore2d_indice(int& x, int& y, int& dimX) { //overload per singole componenti
-	return x + y * dimX;
+int vettore2d_indice(int& x, int& y) { //overload per singole componenti
+	return x + y * dim.x;
 }
-vettore2d indice_vettore2d(int& indice, int& dimX) { //converte un indice array in un vettore bidimensionale
-	int x = indice % dimX;
-	int y = indice / dimX;
+vettore2d indice_vettore2d(int& indice) { //converte un indice array in un vettore bidimensionale
+	int x = indice % dim.x;
+	int y = indice / dim.x;
 	vettore2d ris = { x, y };
 	return ris;
 }
@@ -63,22 +70,26 @@ int dado(int min, int max) { //genera numeri casuali in un range min - max
 }
 
 //generazione
-void inizializza_stanza(Casella stanza[], int& dimX, int& dimY) {
-	for(int y = 0; y < dimY; y++) {
-		for(int x = 0; x < dimX; x++) {		
-			Casella* casella = &stanza[vettore2d_indice(x, y, dimX)];
+void inizializza_stanza(Casella stanza[]) {
+	for(int y = 0; y < dim.y; y++) {
+		for(int x = 0; x < dim.x; x++) {
+			Casella* casella = &stanza[vettore2d_indice(x, y)];
 			//condizioni muro
 			bool muroSinistro = (x == 0);
-			bool muroDestro = (x == dimX - 1);
+			bool muroDestro = (x == dim.x - 1);
 			bool muroSuperiore = (y == 0);
-			bool muroInferiore = (y == dimY - 1);
+			bool muroInferiore = (y == dim.y - 1);
 
-			bool portaX = (x == dimX/2);
-			bool portaY = (y == dimY/2);
+			bool portaX = (x == dim.x/2);
+			bool portaY = (y == dim.y/2);
 
 			//assegna enumeratore
-			if((muroSinistro|muroDestro|muroSuperiore|muroInferiore)&!(portaX|portaY)) {
-				casella -> tipoCasella = muro;
+			if(muroSinistro|muroDestro|muroSuperiore|muroInferiore) {
+				if(portaX|portaY) {
+					casella -> tipoCasella = porta;
+				} else {
+					casella -> tipoCasella = muro;
+				}
 			} else {
 				casella -> tipoCasella = casellaVuota;
 			}
@@ -89,16 +100,28 @@ void inizializza_stanza(Casella stanza[], int& dimX, int& dimY) {
 	}
 }
 
-void inizializza_giocatore(Casella stanza[], int dimX, int dimY) {
-	int posizione_giocatoreX = dado(1, dimX - 2);
-	int posizione_giocatoreY = dado(1, dimY - 2);
-	Casella* casellaGiocatore = &stanza[vettore2d_indice(posizione_giocatoreX, posizione_giocatoreY, dimX)];
-	posizioneGiocatore.x = posizione_giocatoreX;
-	posizioneGiocatore.y = posizione_giocatoreY;
+void inizializza_giocatore(Casella stanza[]) {
+	if((posizioneGiocatore.x == 1)|(posizioneGiocatore.x == 999)) {
+		posizioneGiocatore.y = dim.y / 2;
+		if(posizioneGiocatore.x == 999) {
+			posizioneGiocatore.x = dim.x - 2;
+		}
+	} else {
+		if((posizioneGiocatore.y == 1)|(posizioneGiocatore.y == 999)) {
+			posizioneGiocatore.x = dim.x / 2;
+			if(posizioneGiocatore.y == 999) {
+				posizioneGiocatore.y = dim.y - 2;
+			}
+		} else {
+			posizioneGiocatore.x = dado(1, dim.x - 2);
+			posizioneGiocatore.y = dado(1, dim.y - 2);
+		}
+	}
+	Casella* casellaGiocatore = &stanza[vettore2d_indice(posizioneGiocatore)];
 	casellaGiocatore -> entita = giocatore;
 }
 
-void spostaGiocatore(int i, Casella stanza[], int& dimX); //inizializzo per la generazione successiva del menù
+int spostaGiocatore(int i, Casella stanza[]); //inizializzo per la generazione successiva del menù
 
 //generazione menu
 void inizializza_menuMappa(elementoMenu menuMappa[elementiMenuMappa]) {
@@ -151,6 +174,9 @@ void disegna_casella(Casella& casella) {
 		case muro:
 			cout << "# ";
 			break;
+		case porta:
+			cout << "A ";
+			break;
 		case casellaVuota:
 			cout << "  ";
 	}
@@ -181,12 +207,12 @@ int disegna_menu(elementoMenu menu[elementiMenuMappa], int& scelta) {
 }
 
 //logica di gioco
-void esegui_scelta(int i, elementoMenu menu[elementiMenuMappa], Casella stanza[], int& dimX) {
-	(*menu[i].funzione) (i, stanza, dimX);
+int esegui_scelta(int i, elementoMenu menu[elementiMenuMappa], Casella stanza[]) {
+	return (*menu[i].funzione) (i, stanza);
 }
 
-void spostaGiocatore(int i, Casella stanza[], int& dimX) { //0 = su; 1 = sinistra; 2 = giù; 3 = destra
-	Casella* casellaGiocatore = &stanza[vettore2d_indice(posizioneGiocatore, dimX)];
+int spostaGiocatore(int i, Casella stanza[]) { //0 = su; 1 = sinistra; 2 = giù; 3 = destra
+	Casella* casellaGiocatore = &stanza[vettore2d_indice(posizioneGiocatore)];
 	casellaGiocatore -> entita = entitaVuota;
 	vettore2d vecchiaPosizione = posizioneGiocatore;
 	string stringaDirezione;
@@ -208,21 +234,47 @@ void spostaGiocatore(int i, Casella stanza[], int& dimX) { //0 = su; 1 = sinistr
 			stringaDirezione = "verso destra.";
 			break;
 	}
-	Casella* nuovaCasella = &stanza[vettore2d_indice(posizioneGiocatore, dimX)];
+	Casella* nuovaCasella = &stanza[vettore2d_indice(posizioneGiocatore)];
 	if(nuovaCasella -> tipoCasella == casellaVuota) {
 		nuovaCasella -> entita = giocatore;
 		concatenaConsole("Ti sei spostato " + stringaDirezione);
 	} else {
-		casellaGiocatore -> entita = giocatore; //reimposta giocatore se ha colliso
-		posizioneGiocatore = vecchiaPosizione;
-		concatenaConsole("Hai incontrato un muro!");
+		if(nuovaCasella -> tipoCasella == porta) {
+			bool portaX = (posizioneGiocatore.x == dim.x/2);
+			bool portaY = (posizioneGiocatore.y == dim.y/2);
+			if(portaX & posizioneGiocatore.y == 0) {
+				posizioneGlobale.y -= 1;
+				posizioneGiocatore.y = 999;
+			} else {
+				if(portaX & posizioneGiocatore.y != 0) {
+					posizioneGlobale.y += 1;
+					posizioneGiocatore.y = 1;
+				}
+			}
+			if(portaY & posizioneGiocatore.x == 0) {
+				posizioneGlobale.x -= 1;
+				posizioneGiocatore.x = 999;
+			} else {
+				if(portaY & posizioneGiocatore.x != 0) {
+					posizioneGlobale.x += 1;
+					posizioneGiocatore.x = 1;
+			}
+			}
+			concatenaConsole("Ti sei spostato in una nuova stanza " + stringaDirezione;
+			return 0;
+		} else {
+			casellaGiocatore -> entita = giocatore; //reimposta giocatore se ha colliso
+			posizioneGiocatore = vecchiaPosizione;
+			concatenaConsole("Hai incontrato un muro!");
+		}
 	}
+	return 1;
 }
 
-void disegna_stanza(Casella stanza[], int& dimX, int& dimY) { //oltre alla stanza, si concatena sul lato destro la console
-	for(int y = 0; y < dimY; y++) {
-		for(int x = 0; x < dimX; x++) {
-			int indice = vettore2d_indice(x ,y, dimX);
+void disegna_stanza(Casella stanza[]) { //oltre alla stanza, si concatena sul lato destro la console
+	for(int y = 0; y < dim.y; y++) {
+		for(int x = 0; x < dim.x; x++) {
+			int indice = vettore2d_indice(x ,y);
 			disegna_casella(stanza[indice]);
 		}
 		cout << "| ";
@@ -232,15 +284,9 @@ void disegna_stanza(Casella stanza[], int& dimX, int& dimY) { //oltre alla stanz
 }
 
 int main() {
-	srand(25); //inizializza seed casuale con time
-	//inizializzazione livello
-	int dimX = dado(boundLivelloMinimi.x, boundLivelloMassimi.x);
-	int dimY = dado(boundLivelloMinimi.y, boundLivelloMassimi.y);
-	Casella stanza[dimX * dimY];
-	inizializza_stanza(stanza, dimX, dimY);
-	
-	//inizializzazione entita'
-	inizializza_giocatore(stanza, dimX, dimY);
+
+	posizioneGlobale.x = 256; //inizializza in un luogo arbitrario
+	posizioneGlobale.y = 256;
 	
 	//inizializzazione menu
 	elementoMenu menuMappa[elementiMenuMappa];
@@ -248,14 +294,25 @@ int main() {
 	inizializza_console();
 
 	int scelta;
+
+	start:
+	srand(cantor(posizioneGlobale.x, posizioneGlobale.y)); //inizializza seed casuale con posizione globale//inizializzazione livello
+	dim.x = dado(boundLivelloMinimi.x, boundLivelloMassimi.x);
+	dim.y = dado(boundLivelloMinimi.y, boundLivelloMassimi.y);
+	Casella stanza[dim.x * dim.y];
+	inizializza_stanza(stanza);
+	//inizializzazione entita'
+	inizializza_giocatore(stanza);
 	
 	while(true) {
 		clear();
 		//game loop
-		disegna_stanza(stanza, dimX, dimY);
-		separator(dimX);
+		disegna_stanza(stanza);
+		separator(dim.x);
 		int scelta = disegna_menu(menuMappa, scelta);
-		esegui_scelta(scelta, menuMappa, stanza, dimX);
+		if(!esegui_scelta(scelta, menuMappa, stanza)) {
+			goto start;
+		}
 	}
 	return 0;
 }
