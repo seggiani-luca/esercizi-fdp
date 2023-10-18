@@ -260,7 +260,7 @@ int spostaGiocatore(int i, Casella stanza[]) { //0 = su; 1 = sinistra; 2 = giù;
 					posizioneGiocatore.x = 1;
 			}
 			}
-			concatenaConsole("Ti sei spostato in una nuova stanza " + stringaDirezione;
+			concatenaConsole("Ti sei spostato in una nuova stanza " + stringaDirezione);
 			return 0;
 		} else {
 			casellaGiocatore -> entita = giocatore; //reimposta giocatore se ha colliso
