@@ -1,14 +1,32 @@
 #include <iostream> //input/output
 #include <cstdlib> //numeri casuali
 #include <string.h> //stringhe/testo
+#include <math.h>
 using namespace std;
 
 //tipi fondamentali
 struct vettore2d { int x; int y; };
+vettore2d operator- (vettore2d a, vettore2d b) {
+	vettore2d ris;
+	ris.x = a.x - b.x;
+	ris.y = a.y - b.y;
+	return ris;
+}
+vettore2d operator+ (vettore2d a, vettore2d b) {
+	vettore2d ris;
+	ris.x = a.x + b.x;
+	ris.y = a.y + b.y;
+	return ris;
+}
+void normalizzaVettore(vettore2d& vettore) {
+	int modulo = sqrt(vettore.x*vettore.x + vettore.y*vettore.y);
+	vettore.x /= modulo;
+	vettore.y /= modulo;
+}
 
 //elementi livello
 enum TipoCasella { muro, porta, casellaVuota };
-enum Entita { giocatore, entitaVuota };
+enum Entita { giocatore, imp, entitaVuota };
 struct Casella { TipoCasella tipoCasella; Entita entita; };
 vettore2d posizioneGiocatore; //la posizione del giocatore e' definita sia come entita che come coordinate per accesso rapido
 vettore2d boundLivelloMinimi = {5,5};
@@ -83,6 +101,8 @@ void inizializza_stanza(Casella stanza[]) {
 			bool portaX = (x == dim.x/2);
 			bool portaY = (y == dim.y/2);
 
+			casella -> entita = entitaVuota;
+
 			//assegna enumeratore
 			if(muroSinistro|muroDestro|muroSuperiore|muroInferiore) {
 				if(portaX|portaY) {
@@ -91,10 +111,11 @@ void inizializza_stanza(Casella stanza[]) {
 					casella -> tipoCasella = muro;
 				}
 			} else {
+				if(dado(0,100) == 1) {
+					casella -> entita = imp;
+				}
 				casella -> tipoCasella = casellaVuota;
 			}
-			
-			casella -> entita = entitaVuota;
 			
 		}
 	}
@@ -162,6 +183,9 @@ void disegna_entita(Entita& entita) {
 	switch(entita) {
 		case giocatore:
 			cout << "a ";
+			break;
+		case imp:
+			cout << "b ";
 	}
 }
 
@@ -204,6 +228,18 @@ int disegna_menu(elementoMenu menu[elementiMenuMappa], int& scelta) {
 	}
 
 	return 0;
+}
+
+void disegna_stanza(Casella stanza[]) { //oltre alla stanza, si concatena sul lato destro la console
+	for(int y = 0; y < dim.y; y++) {
+		for(int x = 0; x < dim.x; x++) {
+			int indice = vettore2d_indice(x ,y);
+			disegna_casella(stanza[indice]);
+		}
+		cout << "| ";
+		stampa_linea_console(y);
+		cout << endl;
+	}
 }
 
 //logica di gioco
@@ -271,15 +307,28 @@ int spostaGiocatore(int i, Casella stanza[]) { //0 = su; 1 = sinistra; 2 = giù;
 	return 1;
 }
 
-void disegna_stanza(Casella stanza[]) { //oltre alla stanza, si concatena sul lato destro la console
-	for(int y = 0; y < dim.y; y++) {
-		for(int x = 0; x < dim.x; x++) {
-			int indice = vettore2d_indice(x ,y);
-			disegna_casella(stanza[indice]);
+void sposta_verso_giocatore(Casella stanza[], int i) {
+	//algebra
+	vettore2d posCasella = indice_vettore2d(i);
+	vettore2d delta = posizioneGiocatore - posCasella;
+	normalizzaVettore(delta); //normalizzo il vettore
+	//assegnamenti
+	Casella* casella = &stanza[i];
+	Entita entita = casella -> entita;
+	casella -> entita = entitaVuota;
+	vettore2d nuoveCoordinate = posCasella + delta;
+	Casella* nuovaCasella = &stanza[vettore2d_indice(nuoveCoordinate)];
+	nuovaCasella -> entita = entita;
+}
+
+void aggiorna_entita(Casella stanza[]) {
+	for(int i = 0; i < (dim.x*dim.y); i++) {
+		Casella* casella = &stanza[i];
+		switch(casella -> entita) {
+			case imp:
+				sposta_verso_giocatore(stanza, i);
+				break;
 		}
-		cout << "| ";
-		stampa_linea_console(y);
-		cout << endl;
 	}
 }
 
@@ -310,6 +359,7 @@ int main() {
 		disegna_stanza(stanza);
 		separator(dim.x);
 		int scelta = disegna_menu(menuMappa, scelta);
+		aggiorna_entita(stanza);
 		if(!esegui_scelta(scelta, menuMappa, stanza)) {
 			goto start;
 		}
