@@ -18,10 +18,17 @@ vettore2d operator+ (vettore2d a, vettore2d b) {
 	ris.y = a.y + b.y;
 	return ris;
 }
-void normalizzaVettore(vettore2d& vettore) {
-	int modulo = sqrt(vettore.x*vettore.x + vettore.y*vettore.y);
-	vettore.x /= modulo;
-	vettore.y /= modulo;
+void normalizzaVettore(vettore2d& vettore) { //implementazione 'naive' su sole int
+	if(vettore.x > 0)
+		vettore.x = 1;
+	if(vettore.x < 0)
+		vettore.x = -1;
+	if(vettore.y > 0)
+		vettore.y = 1;
+	if(vettore.y < 0)
+		vettore.y = -1;
+	if((vettore.x != 0) & (vettore.y != 0))
+		vettore.y = 0;
 }
 
 //elementi livello
@@ -310,13 +317,13 @@ int spostaGiocatore(int i, Casella stanza[]) { //0 = su; 1 = sinistra; 2 = giù;
 void sposta_verso_giocatore(Casella stanza[], int i) {
 	//algebra
 	vettore2d posCasella = indice_vettore2d(i);
-	vettore2d delta = posizioneGiocatore - posCasella;
+	vettore2d delta = posCasella - posizioneGiocatore;
 	normalizzaVettore(delta); //normalizzo il vettore
 	//assegnamenti
 	Casella* casella = &stanza[i];
 	Entita entita = casella -> entita;
 	casella -> entita = entitaVuota;
-	vettore2d nuoveCoordinate = posCasella + delta;
+	vettore2d nuoveCoordinate = posCasella - delta;
 	Casella* nuovaCasella = &stanza[vettore2d_indice(nuoveCoordinate)];
 	nuovaCasella -> entita = entita;
 }
