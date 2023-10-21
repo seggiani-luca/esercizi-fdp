@@ -1,0 +1,3 @@
+C:/Users/f515-ej011t/Source Code/CLion Projects/Esercizi/cmake-build-debug/CMakeFiles/Esercizi.dir
+C:/Users/f515-ej011t/Source Code/CLion Projects/Esercizi/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/f515-ej011t/Source Code/CLion Projects/Esercizi/cmake-build-debug/CMakeFiles/rebuild_cache.dir

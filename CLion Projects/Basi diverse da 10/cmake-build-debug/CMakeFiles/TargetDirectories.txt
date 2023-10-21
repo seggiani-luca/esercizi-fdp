@@ -1,0 +1,3 @@
+C:/Users/f515-ej011t/Source Code/CLion Projects/Basi diverse da 10/cmake-build-debug/CMakeFiles/Basi_diverse_da_10.dir
+C:/Users/f515-ej011t/Source Code/CLion Projects/Basi diverse da 10/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/f515-ej011t/Source Code/CLion Projects/Basi diverse da 10/cmake-build-debug/CMakeFiles/rebuild_cache.dir

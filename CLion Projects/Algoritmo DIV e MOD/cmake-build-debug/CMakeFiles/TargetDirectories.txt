@@ -1,0 +1,3 @@
+C:/Users/f515-ej011t/CLionProjects/Algoritmo DIV e MOD/cmake-build-debug/CMakeFiles/Algoritmo_DIV_e_MOD.dir
+C:/Users/f515-ej011t/CLionProjects/Algoritmo DIV e MOD/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/f515-ej011t/CLionProjects/Algoritmo DIV e MOD/cmake-build-debug/CMakeFiles/rebuild_cache.dir
