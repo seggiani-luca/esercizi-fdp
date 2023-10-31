@@ -49,8 +49,8 @@ cmake_ninja_workdir = C$:/Users/f515-ej011t/Source$ Code/CLion$ Projects/Eserciz
 
 build cmake_object_order_depends_target_Esercizi: phony || CMakeFiles/Esercizi.dir
 
-build CMakeFiles/Esercizi.dir/menu_operazioni.cpp.obj: CXX_COMPILER__Esercizi_unscanned_Debug C$:/Users/f515-ej011t/Source$ Code/CLion$ Projects/Esercizi/menu_operazioni.cpp || cmake_object_order_depends_target_Esercizi
-  DEP_FILE = CMakeFiles\Esercizi.dir\menu_operazioni.cpp.obj.d
+build CMakeFiles/Esercizi.dir/b_alla_e.cpp.obj: CXX_COMPILER__Esercizi_unscanned_Debug C$:/Users/f515-ej011t/Source$ Code/CLion$ Projects/Esercizi/b_alla_e.cpp || cmake_object_order_depends_target_Esercizi
+  DEP_FILE = CMakeFiles\Esercizi.dir\b_alla_e.cpp.obj.d
   FLAGS = -g -fdiagnostics-color=always
   OBJECT_DIR = CMakeFiles\Esercizi.dir
   OBJECT_FILE_DIR = CMakeFiles\Esercizi.dir
@@ -63,7 +63,7 @@ build CMakeFiles/Esercizi.dir/menu_operazioni.cpp.obj: CXX_COMPILER__Esercizi_un
 #############################################
 # Link the executable Esercizi.exe
 
-build Esercizi.exe: CXX_EXECUTABLE_LINKER__Esercizi_Debug CMakeFiles/Esercizi.dir/menu_operazioni.cpp.obj
+build Esercizi.exe: CXX_EXECUTABLE_LINKER__Esercizi_Debug CMakeFiles/Esercizi.dir/b_alla_e.cpp.obj
   FLAGS = -g
   LINK_LIBRARIES = -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\Esercizi.dir
