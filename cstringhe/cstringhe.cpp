@@ -31,6 +31,15 @@ void my_strcat(char* dest, const char* src) {
     }
 }
 
+char* my_strchr(char* dest, char c) {
+	while(*dest != '\0') {
+		if(*dest == c)
+			return dest;
+		dest++;
+	}
+	return nullptr;
+}
+
 int main() {
     char* str = "Stringa";
     cout << my_strlen(str) << endl;
@@ -45,6 +54,23 @@ int main() {
     char* concSrc = " Diem";
     my_strcat(concDest, concSrc);
     cout << concDest << endl;
+	
+	char* frase = "Il grande elefante bianco";
+	char carattere = 'g';
+	cout << "La stringa e': " << frase << endl;
+	char* p = my_strchr(frase, carattere);
+	if(p != NULL) {
+		cout << "Il carattere " << carattere << " si trova in posizione: " << (p - frase) << endl;;
+	} else {
+		cout << "Il carattere "  << carattere <<  " non si trova nella stringa" << endl;
+	}
+	char carattere2 = 'z';
+	p = my_strchr(frase, carattere2);
+	if(p != NULL) {
+		cout << "Il carattere " << carattere2 << " si trova in posizione: " << (p - frase) << endl;;
+	} else {
+		cout << "Il carattere "  << carattere2 <<  " non si trova nella stringa" << endl;
+	}
 
     return 0;
 }
