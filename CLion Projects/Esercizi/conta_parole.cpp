@@ -8,13 +8,18 @@ using namespace std;
 int contaParole() {
     int conto = 0;
     char c;
+    bool parola = false;
     cin.get(c);
     while(c != '\n') {
+        if(c != ' ' & !parola) {
+            conto += 1;
+            parola = true;
+        }
         if(c == ' ')
-          conto++;
+            parola = false;
         cin.get(c);
     }
-    return (conto == 0 ? 0 : conto+1);
+    return conto;
 }
 
 int main() {
