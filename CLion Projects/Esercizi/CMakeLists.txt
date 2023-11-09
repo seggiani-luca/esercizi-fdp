@@ -3,4 +3,4 @@ project(Esercizi)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(Esercizi  b_alla_e.cpp)
+add_executable(Esercizi  struttura_coda.cpp)
