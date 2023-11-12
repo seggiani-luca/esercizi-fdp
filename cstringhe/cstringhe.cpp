@@ -41,19 +41,19 @@ char* my_strchr(char* dest, char c) {
 }
 
 int main() {
-    char* str = "Stringa";
-    cout << my_strlen(str) << endl;
+  char* str = "Stringa";
+  cout << my_strlen(str) << endl;
 
-    char* src = "Texas";
-    char dest[my_strlen(src) + 1];
-    my_strcpy(dest, src);
-    cout << dest << endl;
+  char* src = "Texas";
+  char dest[my_strlen(src) + 1];
+  my_strcpy(dest, src);
+  cout << dest << endl;
 
-    char concDest[11];
-    my_strcpy(concDest, "Carpe");
-    char* concSrc = " Diem";
-    my_strcat(concDest, concSrc);
-    cout << concDest << endl;
+  char concDest[11];
+  my_strcpy(concDest, "Carpe");
+  char* concSrc = " Diem";
+  my_strcat(concDest, concSrc);
+  cout << concDest << endl;
 	
 	char* frase = "Il grande elefante bianco";
 	char carattere = 'g';
