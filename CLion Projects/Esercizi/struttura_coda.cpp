@@ -22,6 +22,8 @@ bool empty(coda& c) {
 }
 
 bool full(coda& c) {
+    if(empty(c))
+        return false;
     return ((c.front+1) % SIZE == c.back);
 }
 
@@ -34,8 +36,6 @@ bool push(coda& c, int n) {
 }
 
 bool pop(coda &c, int& n) {
-    if(empty(c))
-        return false;
     n = *(c.queue + c.back);
     c.back = (c.back + 1) % SIZE;
     return true;
