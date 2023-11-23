@@ -2,3 +2,6 @@
 #ignora oggetti eseguibili
 *.exe
 *.out
+
+#ignora file multimediali
+*.mp3
