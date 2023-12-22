@@ -1,0 +1,26 @@
+# ninja log v5
+5	36	1702299601968642707	CMakeFiles/prova.dir/header.cpp.o	4c92f4f669c11e3c
+2	472	1702299602405309897	CMakeFiles/prova.dir/main.cpp.o	107ab6d2c5926dbf
+1	11	1702299616901993997	CMakeFiles/prova.dir/header.cpp.o	4c92f4f669c11e3c
+0	301	1702299617191994346	CMakeFiles/prova.dir/main.cpp.o	107ab6d2c5926dbf
+0	12	1702299647252030583	CMakeFiles/prova.dir/header.cpp.o	4c92f4f669c11e3c
+0	274	1702299647515364235	CMakeFiles/prova.dir/main.cpp.o	107ab6d2c5926dbf
+0	11	1702299654762039656	CMakeFiles/prova.dir/header.cpp.o	4c92f4f669c11e3c
+0	273	1702299655025373307	CMakeFiles/prova.dir/main.cpp.o	107ab6d2c5926dbf
+0	290	1702299702575430901	CMakeFiles/prova.dir/main.cpp.o	107ab6d2c5926dbf
+290	346	1702299702628764299	prova	1ac99a9207284ea8
+1	12	1702299709665439510	CMakeFiles/prova.dir/header.cpp.o	4c92f4f669c11e3c
+1	267	1702299709922106489	CMakeFiles/prova.dir/main.cpp.o	107ab6d2c5926dbf
+1	11	1702299713468777465	CMakeFiles/prova.dir/header.cpp.o	4c92f4f669c11e3c
+0	289	1702299713748777805	CMakeFiles/prova.dir/main.cpp.o	107ab6d2c5926dbf
+1	20	1702299721778787566	CMakeFiles/prova.dir/header.cpp.o	4c92f4f669c11e3c
+0	315	1702299722072121257	CMakeFiles/prova.dir/main.cpp.o	107ab6d2c5926dbf
+1	13	1702299725125458304	CMakeFiles/prova.dir/header.cpp.o	4c92f4f669c11e3c
+1	371	1702299725482125405	CMakeFiles/prova.dir/main.cpp.o	107ab6d2c5926dbf
+0	12	1702299760198834373	CMakeFiles/prova.dir/header.cpp.o	4c92f4f669c11e3c
+0	11	1702299781542193777	CMakeFiles/prova.dir/header.cpp.o	4c92f4f669c11e3c
+0	277	1702299781808860770	CMakeFiles/prova.dir/main.cpp.o	107ab6d2c5926dbf
+277	325	1702299781855527493	prova	1ac99a9207284ea8
+1	12	1702299789602203633	CMakeFiles/prova.dir/header.cpp.o	4c92f4f669c11e3c
+1	261	1702299789852203939	CMakeFiles/prova.dir/main.cpp.o	107ab6d2c5926dbf
+261	310	1702299789898870663	prova	1ac99a9207284ea8
