@@ -33,12 +33,12 @@ int main() {
 
     if(a==0){ //prime considerazioni sui coefficienti
         if(b==0) {
-            cout << "L'equazione e' degenere";
+            cout << "L'equazione e' degenere" << endl;
             return 0;
         } else {
             cout << "L'equazione e' di primo grado, la soluzione e' ";
             double ris = -c / b;
-            cout << ris;
+            cout << ris << endl;
             return 0;
         }
     }
@@ -47,14 +47,14 @@ int main() {
     if(det < 0) {
         cout << "L'equazione ha soluzioni immaginarie"<<endl;
 
-        /*
+        
         double ris_a = -b / (2 * a);
         double ris_b = sqrt(-det) / (2 * a);
 
         cout << "Le soluzioni immaginarie dell'equazione sono: " //concateno la stringa qui
-             << ris_a << " + i" << ris_b << " e "
-             << ris_a << " - i" << ris_b;
-        */
+             << ris_a << " + " << ris_b << "i e "
+             << ris_a << " - " << ris_b << "i" << endl;
+        
 
     }
     if(det == 0) {
@@ -64,7 +64,7 @@ int main() {
     if(det > 0) {
         double ris1 = (-b - sqrt(det)) / (2*a);
         double ris2 = (-b + sqrt(det)) / (2*a);
-        cout << "Le soluzioni reali dell'equazione sono " << ris1 << " e " << ris2;
+        cout << "Le soluzioni reali dell'equazione sono " << ris1 << " e " << ris2 << endl;
     }
 
     return 0;
