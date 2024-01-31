@@ -32,7 +32,7 @@ int main() {
   cin >> steps;
 
   Function* function = new Function;
-  function->fun = atan;
+  function->fun = sin;
   
   cout << "The calculated integral is " << integrate_midpoint(a, b, steps, function) << endl;
 
